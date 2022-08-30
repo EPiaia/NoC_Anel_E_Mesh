@@ -1,6 +1,5 @@
 package com.mycompany.noc_mesh;
 
-
 import java.util.Objects;
 
 /**
@@ -8,7 +7,9 @@ import java.util.Objects;
  * @author Computação
  */
 public class Nodo {
-    
+
+    private String id;
+    private Integer qtdPacotes = 0;
     private Integer posicaoX;
     private Integer posicaoY;
     private Nodo nodoDireita;
@@ -27,7 +28,23 @@ public class Nodo {
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
     }
-    
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Integer getQtdPacotes() {
+        return qtdPacotes;
+    }
+
+    public void setQtdPacotes(Integer qtdPacotes) {
+        this.qtdPacotes = qtdPacotes;
+    }
+
     public Integer getPosicaoX() {
         return posicaoX;
     }
@@ -75,73 +92,80 @@ public class Nodo {
     public void setNodoBaixo(Nodo nodoBaixo) {
         this.nodoBaixo = nodoBaixo;
     }
-    
-    public void criarMensagem() {
+
+    public void criarMensagem(int pacotes) {
         System.out.println("O nodo " + getIdentificacaoNodo() + " criou a mensagem");
+        this.qtdPacotes += pacotes;
     }
-    
+
     public void enviarMensagem(Nodo nodo) {
         System.out.println("O nodo " + getIdentificacaoNodo() + " enviou a mensagem para o nodo " + nodo.getIdentificacaoNodo());
     }
-    
-    public void receberMensagem(Nodo nodo) {
+
+    public void receberMensagem(Nodo nodo, int pacotes) {
         System.out.println("O nodo " + getIdentificacaoNodo() + " recebeu a mensagem do nodo " + nodo.getIdentificacaoNodo());
+        this.qtdPacotes += pacotes;
     }
-    
+
     public void consumirMensagem() {
         System.out.println("O nodo " + getIdentificacaoNodo() + " consumiu a mensagem");
     }
-    
+
     public void nodoEhDestino() {
         System.out.println("O nodo " + getIdentificacaoNodo() + " é o destino");
     }
-    
+
     public void nodoNaoEhDestino() {
         System.out.println("O nodo " + getIdentificacaoNodo() + " não é o destino");
     }
-    
+
     public String getIdentificacaoNodo() {
-        if(this.posicaoY == null) {
+        if (this.posicaoY == null) {
             return String.valueOf(this.posicaoX);
         } else {
             return this.posicaoX + "-" + this.posicaoY;
         }
     }
-    
+
     public boolean isTarget(Integer target) {
         return this.equals(target);
     }
-    
+
     public Integer getDistanciaAteNodoDireita(Integer target) {
         int count = 0;
-        if(!this.equals(target)) {
+        if (!this.equals(target)) {
             Nodo nodo = this.getNodoDireita();
-            if(nodo.getPosicaoX().equals(target)) {
+            if (nodo.getPosicaoX().equals(target)) {
                 return 1;
             }
-            while(!nodo.getPosicaoX().equals(target)) {
+            while (!nodo.getPosicaoX().equals(target)) {
                 count++;
                 nodo = nodo.getNodoDireita();
             }
         }
         return count;
     }
-    
+
     public Integer getDistanciaAteNodoEsquerda(Integer target) {
         int count = 0;
-        if(!this.equals(target)) {
+        if (!this.equals(target)) {
             Nodo nodo = this.getNodoEsquerda();
-            if(nodo.getPosicaoX().equals(target)) {
+            if (nodo.getPosicaoX().equals(target)) {
                 return 1;
             }
-            while(!nodo.getPosicaoX().equals(target)) {
+            while (!nodo.getPosicaoX().equals(target)) {
                 count++;
                 nodo = nodo.getNodoEsquerda();
             }
         }
         return count;
     }
-    
+
+    public String getPercUso(Integer qtdTotalPacotes) {
+        Double perc = 100.0 * qtdPacotes / qtdTotalPacotes;
+        return String.format("%% %.2f", perc);
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
